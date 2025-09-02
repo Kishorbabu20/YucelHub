@@ -1,0 +1,519 @@
+/* Portfolio Page Styles */
+.po-container {
+  min-height: 100vh;
+  background: #fff;
+}
+
+/* Hero Section */
+.po-hero {
+  text-align: center;
+  padding: 80px 20px 60px;
+  background: #fff;
+}
+
+.po-hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.po-hero-text {
+  text-align: center;
+  flex: 1;
+  max-width: 600px;
+}
+
+.po-title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 20px 0;
+  letter-spacing: 2px;
+  font-family: 'Sarabun', sans-serif;
+}
+
+.po-eyebrow {
+  font-size: 1.2rem;
+  color: #ff6600;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+}
+
+.po-eyebrow-highlight {
+  color: #ff6600;
+}
+
+.po-sub {
+  font-size: 1.8rem;
+  color: #333;
+  margin: 0 0 40px 0;
+  font-weight: 500;
+  max-width: 600px;
+  font-family: 'Sora', sans-serif;
+}
+
+.po-scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-shrink: 0;
+}
+
+.po-scroll-circle {
+  width: 80px;
+  height: 80px;
+  border: 3px solid #333;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.po-scroll-arrow {
+  font-size: 2rem;
+  color: #333;
+  font-weight: bold;
+}
+
+.po-scroll-text {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Sora', sans-serif;
+  margin: 0;
+}
+
+/* Filters Section */
+.po-filters {
+  padding: 40px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.po-filters-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.po-filter-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f5f5f5;
+  color: #333;
+}
+
+.po-filter-btn:hover {
+  background: #e0e0e0;
+}
+
+.po-filter-btn.active {
+  background: #ff6600;
+  color: white;
+}
+
+/* Projects Grid */
+.po-projects {
+  padding: 60px 20px;
+  background: #fff;
+}
+
+.po-projects-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.po-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.po-project-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.po-project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.po-project-image {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  position: relative;
+}
+
+.po-project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.po-project-preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  width: 100%;
+  height: 100%;
+  gap: 2px;
+}
+
+.po-preview-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.po-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.po-video-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.po-video-play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 102, 0, 0.9);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.po-more-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 102, 0, 0.8);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 12px 0;
+}
+
+.po-more-count {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.po-project-card:hover .po-project-image img {
+  transform: scale(1.05);
+}
+
+.po-project-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 102, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.po-project-card:hover .po-project-overlay {
+  opacity: 1;
+}
+
+.po-project-overlay-btn {
+  background: transparent;
+  color: white;
+  border: none;
+  padding: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.po-project-overlay-btn:hover {
+  transform: translateY(-2px);
+}
+
+.po-project-content {
+  padding: 25px;
+}
+
+.po-project-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 15px 0;
+  line-height: 1.3;
+  font-family: 'Sarabun', sans-serif;
+}
+
+.po-project-description {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Sora', sans-serif;
+}
+
+.po-project-tags {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.po-project-tag {
+  background: #ff6600;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: 'Sora', sans-serif;
+  transition: background-color 0.2s ease;
+}
+
+.po-project-tag:hover {
+  background: #e55a00;
+}
+
+.po-project-btn {
+  width: 100%;
+  padding: 12px 20px;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-family: 'Sora', sans-serif;
+}
+
+.po-project-btn:hover {
+  background: #333;
+}
+
+.po-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  font-size: 1.1rem;
+  font-family: 'Sora', sans-serif;
+}
+
+/* CTA Section */
+.po-cta {
+  background: #ff6600;
+  padding: 40px 24px;
+  text-align: center;
+  margin: 90px auto 120px;
+  max-width: 1100px;
+  border-radius: 12px;
+}
+
+.po-cta-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.po-cta-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 20px 0;
+  font-family: 'Sarabun', sans-serif;
+}
+
+.po-cta-description {
+  font-size: 1.1rem;
+  color: white;
+  line-height: 1.6;
+  margin: 0 0 40px 0;
+  opacity: 0.95;
+  font-family: 'Sora', sans-serif;
+}
+
+.po-cta-btn {
+  padding: 15px 30px;
+  background: white;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Sora', sans-serif;
+}
+
+.po-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .po-title {
+    font-size: 3rem;
+  }
+  
+  .po-sub {
+    font-size: 1.6rem;
+  }
+  
+  .po-projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+  
+  .po-cta-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .po-hero {
+    padding: 60px 20px 40px;
+  }
+  
+  .po-hero-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+  
+  .po-hero-text {
+    text-align: center;
+  }
+  
+  .po-title {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+  }
+  
+  .po-sub {
+    font-size: 1.4rem;
+  }
+  
+  .po-scroll-indicator {
+    position: static;
+    transform: none;
+    margin-top: 20px;
+  }
+  
+  .po-scroll-circle {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .po-scroll-arrow {
+    font-size: 1.5rem;
+  }
+  
+  .po-scroll-text {
+    font-size: 0.8rem;
+  }
+  
+  .po-filters {
+    padding: 30px 20px;
+  }
+  
+  .po-filters-inner {
+    gap: 10px;
+  }
+  
+  .po-filter-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .po-projects {
+    padding: 40px 20px;
+  }
+  
+  .po-projects-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .po-project-image {
+    height: 200px;
+  }
+  
+  .po-project-content {
+    padding: 20px;
+  }
+  
+  .po-project-title {
+    font-size: 1.3rem;
+  }
+  
+  .po-cta {
+    padding: 60px 20px;
+  }
+  
+  .po-cta-title {
+    font-size: 2rem;
+  }
+  
+  .po-cta-description {
+    font-size: 1rem;
+  }
+  
+  .po-cta-btn {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+}

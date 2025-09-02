@@ -1,17 +1,56 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { useEffect, useState } from "react";
+import { createRoot } from "react-dom/client";
+import HomePage from "./HomePage";
+import ServicesPage from "./ServicesPage";
+import AboutPage from "./AboutPage";
+import PartnerPage from "./PartnerPage";
+import CareerPage from "./CareerPage";
+import Portfolio from "./Portfolio";
+import ProjectDetail from "./ProjectDetail";
+import ContactPage from "./ContactPage";
+import AdminPage from "./admin/AdminPage";
+import "./styles/HomePage.css";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+function AppRouter() {
+  const [route, setRoute] = useState(window.location.hash || "#/home");
+
+  useEffect(() => {
+    const onHashChange = () => setRoute(window.location.hash || "#/home");
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  if (route === "#/services") {
+    return <ServicesPage />;
+  }
+  if (route === "#/about") {
+    return <AboutPage />;
+  }
+  if (route === "#/partner") {
+    return <PartnerPage />;
+  }
+  if (route === "#/career") {
+    return <CareerPage />;
+  }
+  if (route === "#/portfolio") {
+    return <Portfolio />;
+  }
+  if (route.startsWith("#/project")) {
+    return <ProjectDetail />;
+  }
+  if (route === "#/contact") {
+    return <ContactPage />;
+  }
+  if (route === "#/admin") {
+    return <AdminPage />;
+  }
+  return <HomePage />;
+}
+
+const container = document.getElementById("root");
+const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <App />
+    <AppRouter />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
