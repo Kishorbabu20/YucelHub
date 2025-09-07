@@ -3,57 +3,222 @@
 }
 
 .sp-hero {
-  padding: 60px 20px 40px;
+  padding: 60px 20px 80px;
   text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .sp-eyebrow {
   color: #ff6600;
-  margin: 0 0 12px 0;
+  margin: 0 0 20px 0;
   font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .sp-title {
-  max-width: 820px;
-  margin: 0 auto 16px;
-  font-size: 2.2rem;
-  font-weight: 600;
+  max-width: 1000px;
+  margin: 0 auto 30px;
+  font-size: 3.5rem;
+  font-weight: 700;
   color: #000;
   font-family: 'Sarabun', sans-serif;
+  line-height: 1.2;
 }
 
 .sp-subtitle {
   max-width: 900px;
   margin: 0 auto;
-  color: #555;
+  color: #666;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.sp-services-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.sp-service-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 60px;
+}
+
+.sp-service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.sp-card-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 60px;
+  align-items: center;
+}
+
+.sp-card-content.reversed {
+  grid-template-columns: 400px 1fr;
+}
+
+/* Ensure proper order for zig-zag layout */
+.sp-card-content .sp-card-text {
+  order: 1;
+}
+
+.sp-card-content .sp-card-image {
+  order: 2;
+}
+
+.sp-card-content.reversed .sp-card-text {
+  order: 2;
+}
+
+.sp-card-content.reversed .sp-card-image {
+  order: 1;
+}
+
+.sp-card-text {
+  flex: 1;
+}
+
+.sp-card-category {
+  color: #ff6600;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sp-card-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 25px 0;
+  font-family: 'Sarabun', sans-serif;
+  line-height: 1.2;
+}
+
+.sp-card-description {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.7;
+  margin: 0 0 30px 0;
   font-family: 'Sora', sans-serif;
 }
 
-.sp-row {
-  display: grid;
-  grid-template-columns: 1fr 460px;
-  grid-template-areas: "text image";
-  gap: 40px;
+.sp-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.sp-tag {
+  background: transparent;
+  border: 1px solid #ff6600;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-family: 'Sora', sans-serif;
+}
+
+.sp-tag:hover {
+  background: #ff6600;
+  color: white;
+}
+
+.sp-expert-quality {
+  display: flex;
   align-items: center;
-  max-width: 1100px;
-  margin: 70px auto;
-  padding: 0 20px;
+  gap: 8px;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: 'Sora', sans-serif;
 }
 
-.sp-row.reversed {
-  grid-template-columns: 460px 1fr;
-  grid-template-areas: "image text";
+.sp-star {
+  color: #ff6600;
+  font-size: 1.1rem;
 }
 
-.sp-col.text { grid-area: text; }
-.sp-col.image { grid-area: image; }
+.sp-get-started-btn {
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  text-transform: lowercase;
+}
+
+.sp-get-started-btn:hover {
+  background: #e55a00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+}
+
+.sp-card-image {
+  width: 100%;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sp-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.sp-service-card:hover .sp-card-image img {
+  transform: scale(1.05);
+}
+
+.sp-service-card.highlighted {
+  border: 3px solid #ff6600;
+  box-shadow: 0 8px 30px rgba(255, 102, 0, 0.2);
+  animation: highlightPulse 2s ease-in-out;
+}
+
+@keyframes highlightPulse {
+  0% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  50% {
+    box-shadow: 0 8px 30px rgba(255, 102, 0, 0.3);
+  }
+
+  100% {
+    box-shadow: 0 8px 30px rgba(255, 102, 0, 0.2);
+  }
+}
 
 .sp-row .sp-col.image img {
   width: 100%;
   height: 320px;
   object-fit: cover;
   border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 .sp-category {
@@ -118,30 +283,124 @@
 }
 
 .sp-final-cta {
-  margin: 90px auto 120px;
+  margin: 120px auto 120px;
   padding: 0 20px;
 }
 
 .sp-final-inner {
-  background: #111;
+  background: #000000;
   color: #fff;
-  border-radius: 12px;
-  padding: 40px 24px;
-  max-width: 1100px;
+  border-radius: 16px;
+  padding: 60px 40px;
+  max-width: 1000px;
   margin: 0 auto;
   text-align: center;
 }
 
+.sp-final-inner h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  font-family: 'Sarabun', sans-serif;
+}
+
+.sp-final-inner p {
+  font-size: 1.2rem;
+  color: #ccc;
+  margin: 0 0 40px 0;
+  font-family: 'Sora', sans-serif;
+  line-height: 1.6;
+}
+
 .sp-cta-actions {
-  margin-top: 20px;
   display: flex;
-  gap: 14px;
+  gap: 20px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 992px) {
-  .sp-row { grid-template-columns: 1fr; grid-template-areas: "image" "text"; }
-  .sp-row.reversed { grid-template-columns: 1fr; grid-template-areas: "image" "text"; }
+  .sp-title {
+    font-size: 2.8rem;
+  }
+
+  .sp-card-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .sp-card-content.reversed {
+    grid-template-columns: 1fr;
+  }
+
+  /* Reset order for mobile - always image first, then text */
+  .sp-card-content .sp-card-text,
+  .sp-card-content.reversed .sp-card-text {
+    order: 2;
+  }
+
+  .sp-card-content .sp-card-image,
+  .sp-card-content.reversed .sp-card-image {
+    order: 1;
+  }
+
+  .sp-card-image {
+    height: 250px;
+  }
+
+  .sp-service-card {
+    padding: 40px;
+  }
 }
 
+@media (max-width: 768px) {
+  .sp-hero {
+    padding: 40px 20px 60px;
+  }
 
+  .sp-title {
+    font-size: 2.2rem;
+  }
+
+  .sp-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .sp-services-grid {
+    padding: 0 20px 60px;
+    gap: 40px;
+  }
+
+  .sp-service-card {
+    padding: 30px;
+  }
+
+  .sp-card-title {
+    font-size: 2rem;
+  }
+
+  .sp-card-description {
+    font-size: 1rem;
+  }
+
+  .sp-card-image {
+    height: 200px;
+  }
+
+  .sp-final-inner {
+    padding: 40px 30px;
+  }
+
+  .sp-final-inner h2 {
+    font-size: 2rem;
+  }
+
+  .sp-final-inner p {
+    font-size: 1.1rem;
+  }
+
+  .sp-cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}

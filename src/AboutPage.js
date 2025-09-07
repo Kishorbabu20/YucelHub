@@ -27,10 +27,10 @@ function AboutHero() {
 
 function ImpactBand() {
   const items = [
-    { value: "80+", label: "Companies Worldwide" },
+    { value: "80+", label: "Brands Worldwide" },
     { value: "200+", label: "Projects Completed" },
-    { value: "15+", label: "Companies Worldwide" },
-    { value: "25+", label: "Companies Worldwide" },
+    { value: "15+", label: "International Clients" },
+    { value: "25+", label: "Collaborations" },
   ];
   return (
     <section className="ab-impact">

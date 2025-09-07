@@ -5,6 +5,7 @@ import ServicesPage from "./ServicesPage";
 import AboutPage from "./AboutPage";
 import PartnerPage from "./PartnerPage";
 import CareerPage from "./CareerPage";
+import JobApplicationPage from "./JobApplicationPage";
 import Portfolio from "./Portfolio";
 import ProjectDetail from "./ProjectDetail";
 import ContactPage from "./ContactPage";
@@ -20,7 +21,7 @@ function AppRouter() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  if (route === "#/services") {
+  if (route.startsWith("#/services")) {
     return <ServicesPage />;
   }
   if (route === "#/about") {
@@ -31,6 +32,9 @@ function AppRouter() {
   }
   if (route === "#/career") {
     return <CareerPage />;
+  }
+  if (route.startsWith("#/job-application")) {
+    return <JobApplicationPage />;
   }
   if (route === "#/portfolio") {
     return <Portfolio />;

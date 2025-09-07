@@ -77,13 +77,13 @@ function WhyWork() {
   );
 }
 
-function OpenPositions({ 
-  activeTab, 
-  setActiveTab, 
-  uploadedFiles, 
-  handleFileUpload, 
-  removeFile, 
-  selectedPosition, 
+function OpenPositions({
+  activeTab,
+  setActiveTab,
+  uploadedFiles,
+  handleFileUpload,
+  removeFile,
+  selectedPosition,
   setSelectedPosition,
   applicationForm,
   handleApplicationSubmit,
@@ -110,16 +110,16 @@ function OpenPositions({
           {
             title: "Video Editor & Motion Designer",
             department: "Production",
-            location: "Remote",
+            location: "Hybrid",
             type: "Full-time",
-            description: "Create compelling video content and motion graphics for our clients across various industries. Requirements: 3+ years of video editing experience, Proficiency in After Effects, Premiere Pro, Motion graphics and animation skills, Portfolio showcasing diverse video projects.",
+            description: "Create compelling video content and motion graphics for our clients across various industries.",
           },
           {
             title: "Project Manager",
             department: "Operations",
-            location: "Remote",
+            location: "On Site",
             type: "Full-time",
-            description: "Lead cross-functional teams and ensure successful project delivery for our clients. Requirements: 3+ years of project management experience, Experience with creative/technical projects, Strong communication and leadership skills, PMP or Agile certification preferred.",
+            description: "Lead cross-functional teams and ensure successful project delivery for our clients.",
           },
         ]);
       } finally {
@@ -129,6 +129,23 @@ function OpenPositions({
 
     loadJobs();
   }, [activeTab]); // Reload when tab changes
+
+  const getLocationIcon = (location) => {
+    return (
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+      </svg>
+    );
+  };
+
+  const getTimeIcon = () => {
+    return (
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z" />
+      </svg>
+    );
+  };
+
   return (
     <section className="cr-open" id="open-positions">
       <div className="cr-open-inner">
@@ -159,20 +176,26 @@ function OpenPositions({
               <div className="cr-positions">
                 {positions.map((p, i) => (
                   <div className="cr-position" key={i}>
-                    <div className="cr-position-head">
-                      <h3>{p.title}</h3>
+                    <div className="cr-position-content">
+                      <div className="cr-position-info">
+                        <h3>{p.title}</h3>
+                        <p className="cr-position-desc">{p.description}</p>
+                        <div className="cr-tags">
+                          <span className="cr-tag">
+                            {getLocationIcon(p.location)}
+                            {p.location}
+                          </span>
+                          <span className="cr-tag">
+                            {getTimeIcon()}
+                            {p.type}
+                          </span>
+                        </div>
+                      </div>
                       <button className="cr-apply-btn" onClick={() => {
-                        setSelectedPosition(p.title);
-                        setActiveTab("apply");
+                        // Redirect to job application page with job ID
+                        window.location.hash = `#/job-application?id=${p.id || 'default'}`;
                       }}>Apply Now</button>
                     </div>
-                    <div className="cr-tags">
-                      <span>{p.department}</span>
-                      <span>{p.location}</span>
-                      <span>{p.type}</span>
-                    </div>
-                    <p>{p.description}</p>
-
                   </div>
                 ))}
               </div>
@@ -189,14 +212,14 @@ function OpenPositions({
               <div className="cr-field full">
                 <label>Position Apply For *</label>
                 <div className="cr-position-toggle">
-                  <button 
+                  <button
                     type="button"
                     className={`cr-toggle-btn ${!selectedPosition ? 'active' : ''}`}
                     onClick={() => setSelectedPosition("")}
                   >
                     Custom Position
                   </button>
-                  <button 
+                  <button
                     type="button"
                     className={`cr-toggle-btn ${selectedPosition ? 'active' : ''}`}
                     onClick={() => {
@@ -210,8 +233,8 @@ function OpenPositions({
                 </div>
                 {selectedPosition ? (
                   <>
-                    <select 
-                      value={selectedPosition} 
+                    <select
+                      value={selectedPosition}
                       onChange={(e) => {
                         setSelectedPosition(e.target.value);
                         handleFormChange('position', e.target.value);
@@ -226,7 +249,7 @@ function OpenPositions({
                   </>
                 ) : (
                   <>
-                    <textarea 
+                    <textarea
                       placeholder="Describe the position you're interested in or the type of role you're looking for..."
                       value={applicationForm.position}
                       onChange={(e) => handleFormChange('position', e.target.value)}
@@ -240,9 +263,9 @@ function OpenPositions({
               </div>
               <div className="cr-field">
                 <label>Full Name *</label>
-                <input 
-                  type="text" 
-                  placeholder="Your full name" 
+                <input
+                  type="text"
+                  placeholder="Your full name"
                   value={applicationForm.fullName}
                   onChange={(e) => handleFormChange('fullName', e.target.value)}
                   required
@@ -250,9 +273,9 @@ function OpenPositions({
               </div>
               <div className="cr-field">
                 <label>Email Address *</label>
-                <input 
-                  type="email" 
-                  placeholder="your.email@example.com" 
+                <input
+                  type="email"
+                  placeholder="your.email@example.com"
                   value={applicationForm.email}
                   onChange={(e) => handleFormChange('email', e.target.value)}
                   required
@@ -260,9 +283,9 @@ function OpenPositions({
               </div>
               <div className="cr-field">
                 <label>Phone number *</label>
-                <input 
-                  type="tel" 
-                  placeholder="+1 (555) 000-0000" 
+                <input
+                  type="tel"
+                  placeholder="+1 (555) 000-0000"
                   value={applicationForm.phone}
                   onChange={(e) => handleFormChange('phone', e.target.value)}
                   required
@@ -270,9 +293,9 @@ function OpenPositions({
               </div>
               <div className="cr-field">
                 <label>LinkedIn Profile *</label>
-                <input 
-                  type="url" 
-                  placeholder="https://linkedin.com/in/yourname" 
+                <input
+                  type="url"
+                  placeholder="https://linkedin.com/in/yourname"
                   value={applicationForm.linkedin}
                   onChange={(e) => handleFormChange('linkedin', e.target.value)}
                   required
@@ -280,16 +303,16 @@ function OpenPositions({
               </div>
               <div className="cr-field full">
                 <label>Portfolio URL</label>
-                <input 
-                  type="url" 
-                  placeholder="https://yourportfolio.com" 
+                <input
+                  type="url"
+                  placeholder="https://yourportfolio.com"
                   value={applicationForm.portfolio}
                   onChange={(e) => handleFormChange('portfolio', e.target.value)}
                 />
               </div>
               <div className="cr-field">
                 <label>Year of Experience *</label>
-                <select 
+                <select
                   value={applicationForm.experience}
                   onChange={(e) => handleFormChange('experience', e.target.value)}
                   required
@@ -302,7 +325,7 @@ function OpenPositions({
               </div>
               <div className="cr-field">
                 <label>When Can you start ?</label>
-                <select 
+                <select
                   value={applicationForm.availability}
                   onChange={(e) => handleFormChange('availability', e.target.value)}
                 >
@@ -314,8 +337,8 @@ function OpenPositions({
               </div>
               <div className="cr-field full">
                 <label>Cover letter (Optional)</label>
-                <textarea 
-                  placeholder="Tell us why you are interested in this position and what makes you great fit for our team..." 
+                <textarea
+                  placeholder="Tell us why you are interested in this position and what makes you great fit for our team..."
                   value={applicationForm.coverLetter}
                   onChange={(e) => handleFormChange('coverLetter', e.target.value)}
                 ></textarea>
@@ -323,9 +346,9 @@ function OpenPositions({
               <div className="cr-field full">
                 <label>Upload Resume & Portfolio Files *</label>
                 <div className="cr-upload">
-                  <input 
-                    type="file" 
-                    multiple 
+                  <input
+                    type="file"
+                    multiple
                     accept=".pdf,.jpg,.jpeg,.png,.gif"
                     onChange={handleFileUpload}
                     style={{ display: 'none' }}
@@ -344,8 +367,8 @@ function OpenPositions({
                       <div key={index} className="cr-file-item">
                         <span className="cr-file-name">{file.name}</span>
                         <span className="cr-file-size">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           className="cr-remove-file"
                           onClick={() => removeFile(index)}
                         >
@@ -357,9 +380,9 @@ function OpenPositions({
                 )}
               </div>
               <div className="cr-field full submit">
-                <button 
-                  className="cr-btn-primary" 
-                  type="submit" 
+                <button
+                  className="cr-btn-primary"
+                  type="submit"
                   disabled={isUploading}
                 >
                   {isUploading ? "Sending Application..." : "Submit Application"}
@@ -429,7 +452,7 @@ export default function CareerPage() {
     availability: "",
     coverLetter: ""
   });
-  
+
   const handleViewOpenPositions = () => {
     setCareerTab("open");
     const target = document.getElementById("open-positions");
@@ -437,7 +460,7 @@ export default function CareerPage() {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
-  
+
   const handleSendPortfolio = () => {
     setCareerTab("apply");
     setSelectedPosition(""); // Clear selected position to show textarea
@@ -452,20 +475,20 @@ export default function CareerPage() {
     const validFiles = files.filter(file => {
       const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
       const maxSize = 10 * 1024 * 1024; // 10MB
-      
+
       if (!validTypes.includes(file.type)) {
         alert(`Invalid file type: ${file.name}. Please upload PDF, JPG, PNG, or GIF files only.`);
         return false;
       }
-      
+
       if (file.size > maxSize) {
         alert(`File too large: ${file.name}. Maximum size is 10MB.`);
         return false;
       }
-      
+
       return true;
     });
-    
+
     setUploadedFiles(prev => [...prev, ...validFiles]);
   };
 
@@ -475,7 +498,7 @@ export default function CareerPage() {
 
   const handleApplicationSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate required fields
     if (!applicationForm.position || !applicationForm.fullName || !applicationForm.email || !applicationForm.phone || !applicationForm.linkedin) {
       alert("Please fill in all required fields marked with *");
@@ -518,7 +541,7 @@ export default function CareerPage() {
 
       if (response.status === 200) {
         alert("Application submitted successfully! We'll review your application and get back to you soon.");
-        
+
         // Reset form
         setApplicationForm({
           position: "",
@@ -547,7 +570,7 @@ export default function CareerPage() {
       ...prev,
       [field]: value
     }));
-    
+
     // Update selectedPosition when position field changes
     if (field === 'position') {
       if (value === "") {
@@ -563,9 +586,9 @@ export default function CareerPage() {
       <CareerHero onViewOpenPositions={handleViewOpenPositions} />
       <Culture />
       <WhyWork />
-      <OpenPositions 
-        activeTab={careerTab} 
-        setActiveTab={setCareerTab} 
+      <OpenPositions
+        activeTab={careerTab}
+        setActiveTab={setCareerTab}
         uploadedFiles={uploadedFiles}
         handleFileUpload={handleFileUpload}
         removeFile={removeFile}

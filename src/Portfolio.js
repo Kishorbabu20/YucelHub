@@ -13,10 +13,7 @@ function PortfolioHero() {
           <p className="po-sub">Here are some of the things we've built</p>
         </div>
         <div className="po-scroll-indicator">
-          <div className="po-scroll-circle">
-            <div className="po-scroll-arrow">↓</div>
-          </div>
-          <p className="po-scroll-text">SCROLL DOWN TO SEE OUR WORKS</p>
+          <img src={require("./assets/scroll.gif")} alt="Scroll down" className="po-scroll-gif" />
         </div>
       </div>
     </section>
@@ -26,7 +23,7 @@ function PortfolioHero() {
 function PortfolioFilters({ activeFilter, setActiveFilter, projects }) {
   // Get unique categories from projects
   const categories = ["All", ...new Set(projects.map(p => p.category).filter(Boolean))];
-  
+
   return (
     <section className="po-filters">
       <div className="po-filters-inner">
@@ -58,7 +55,7 @@ function PortfolioGrid({ projects, loading }) {
         ) : (
           <div className="po-projects-grid">
             {projects.map((project) => (
-              <div className="po-project-card" key={project.id} onClick={() => goToProject(project.id)} style={{cursor:"pointer"}}>
+              <div className="po-project-card" key={project.id} onClick={() => goToProject(project.id)} style={{ cursor: "pointer" }}>
                 <div className="po-project-image">
                   <img src={project.imageUrl || project.image || "/assets/Service3.png"} alt={project.title} />
                   <div className="po-project-overlay">
@@ -121,8 +118,8 @@ export default function Portfolio() {
   }, []);
 
   // Filter projects based on active filter
-  const filteredProjects = activeFilter === "All" 
-    ? projects 
+  const filteredProjects = activeFilter === "All"
+    ? projects
     : projects.filter(project => project.category === activeFilter);
 
   return (

@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { Header } from "./HomePage";
 import "./styles/PartnerPage.css";
 import PartnerImg from "./assets/Partner.png";
+import BookingModal from "./components/BookingModal";
 
-function PartnerHero() {
+function PartnerHero({ onBookCallClick }) {
   return (
     <section className="pt-hero">
-      <p className="pt-eyebrow">Partnership that scales with you</p>
-      <h1 className="pt-title">Partner with Yucel Hub for flexible, scalable creative solutions</h1>
-      <p className="pt-sub">We believe in partnerships that grow with your business. Whether you need project‑based support or a dedicated team, we adapt to your workflow and timeline.</p>
-      <button className="pt-btn-primary">Start Partnership discussion</button>
+      <div className="pt-hero-content">
+        <div className="pt-hero-text">
+          <h1 className="pt-title">
+            <span className="pt-highlight">Earn</span> commissions for every successful referral
+          </h1>
+          <p className="pt-sub">Refer your clients and connections to us and earn for every successful project. Join our partner program and start earning today.</p>
+          <button className="pt-btn-primary" onClick={onBookCallClick}>Join Now — it's free</button>
+        </div>
+        <div className="pt-hero-image">
+          <img src={PartnerImg} alt="Partnership handshake" />
+        </div>
+      </div>
     </section>
   );
 }
@@ -36,44 +45,44 @@ function ModelCard({ title, desc, bullets = [], duration, ideal }) {
 function Models() {
   return (
     <section className="pt-models">
-      <h2>Choose Your Partnership Model</h2>
-      <p className="pt-models-sub">We offer flexible partnership models to match your specific needs and budget.</p>
+      <h2>Referral Program Tiers</h2>
+      <p className="pt-models-sub">Choose the referral tier that best fits your network and earning potential.</p>
       <div className="pt-models-grid">
         <ModelCard
-          title="Project‑Based Partnership"
-          desc="Perfect for specific projects with defined scope and timeline. Get our expertise when you need it most."
+          title="Bronze Partner"
+          desc="Perfect for individuals and small businesses looking to earn from referrals."
           bullets={[
-            "Defined scope and timeline",
-            "Fixed project cost",
-            "Dedicated project team",
-            "Regular progress updates",
+            "5% commission rate",
+            "Basic referral tracking",
+            "Email support",
+            "Monthly payouts",
           ]}
-          duration="2‑8 weeks"
-          ideal="Specific campaigns, product launches, website redesigns"
+          duration="1+ referrals"
+          ideal="Freelancers, small agencies, individual consultants"
         />
         <ModelCard
-          title="Retainer Partnership"
-          desc="Ongoing collaboration for consistent creative and technical support. Your extended team on demand"
+          title="Silver Partner"
+          desc="Ideal for established businesses with regular referral opportunities."
           bullets={[
-            "Monthly allocated hours",
+            "10% commission rate",
+            "Advanced tracking dashboard",
             "Priority support",
-            "Flexible scope adjustment",
-            "Long‑term relationship building",
+            "Bi-weekly payouts",
           ]}
-          duration="3+ months"
-          ideal="Ongoing marketing needs, continuous development, brand management"
+          duration="5+ referrals"
+          ideal="Marketing agencies, consultants, business networks"
         />
         <ModelCard
-          title="Embedded Team"
-          desc="Full‑time dedicated team members who work as part of your internal team. Maximum integration and efficiency."
+          title="Gold Partner"
+          desc="For high-volume referrers with exclusive benefits and premium support."
           bullets={[
-            "Dedicated team members",
-            "Full‑time availability",
-            "Deep project knowledge",
-            "Seamless communication",
+            "15% commission rate",
+            "Dedicated account manager",
+            "Custom marketing materials",
+            "Weekly payouts",
           ]}
-          duration="6+ months"
-          ideal="Large projects, product development, scaling operations"
+          duration="15+ referrals"
+          ideal="Large agencies, enterprise partners, strategic alliances"
         />
       </div>
     </section>
@@ -82,16 +91,16 @@ function Models() {
 
 function Process() {
   const steps = [
-    { n: "01", t: "Discovery call", d: "We start with a comprehensive discussion about your goals, challenges, and vision." },
-    { n: "02", t: "Planning & Strategy", d: "We develop a customized approach and timeline that fits your specific needs." },
-    { n: "03", t: "Team Assembly", d: "We assign the perfect team members based on your project requirements." },
-    { n: "04", t: "Execution & Delivery", d: "We work closely with you to bring your vision to life with regular check‑ins." },
+    { n: "01", t: "Sign Up", d: "Join our referral program for free and get your unique referral link." },
+    { n: "02", t: "Share & Refer", d: "Share your referral link with clients and connections who need our services." },
+    { n: "03", t: "Track Progress", d: "Monitor your referrals through our dashboard and track project progress." },
+    { n: "04", t: "Earn Commissions", d: "Get paid automatically when your referrals become successful projects." },
   ];
   return (
     <section className="pt-process">
       <div className="pt-process-inner">
-        <h2>Our Partnership Process</h2>
-        <p>A streamlined approach to get you from idea to execution quickly and efficiently.</p>
+        <h2>How It Works</h2>
+        <p>Simple steps to start earning commissions from your referrals.</p>
         <div className="pt-steps">
           {steps.map((s) => (
             <div className="pt-step" key={s.n}>
@@ -108,16 +117,17 @@ function Process() {
 
 function Benefits() {
   const items = [
-    { t: "Cost Effective", d: "Save up to 3x compared to hiring in‑house teams or traditional agencies." },
-    { t: "Scalable Team", d: "Scale your team up or down based on project needs without hiring overhead." },
-    { t: "Global Expertise", d: "Access to world‑class talent across multiple time zones and disciplines." },
-    { t: "Proven Track Record", d: "Trusted by 80+ companies worldwide with a history of successful partnerships." },
+    { t: "High Commission Rates", d: "Earn up to 15% commission on every successful referral project." },
+    { t: "Easy Referral Process", d: "Simple referral system with tracking and automated payouts." },
+    { t: "No Upfront Costs", d: "Join our partner program completely free with no hidden fees." },
+    { t: "Dedicated Support", d: "Get dedicated account management and marketing support for your referrals." },
   ];
 
   return (
     <section className="pt-benefits">
       <div className="pt-benefits-inner">
-        <h2>Choose Your Partnership Model</h2>
+        <h2>Why Partner With Us</h2>
+        <p className="pt-benefits-sub">Join our referral program and start earning commissions today</p>
         <div className="pt-benefits-grid">
           <div className="pt-benefits-list">
             <ul>
@@ -127,7 +137,7 @@ function Benefits() {
             </ul>
           </div>
           <div className="pt-benefits-image">
-            <img src={PartnerImg} alt="Workshop" />
+            <img src={PartnerImg} alt="Partnership benefits" />
           </div>
         </div>
       </div>
@@ -136,13 +146,20 @@ function Benefits() {
 }
 
 export default function PartnerPage() {
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+
+  const handleBookCallClick = () => {
+    setIsBookingModalOpen(true);
+  };
+
   return (
     <div className="pt-container">
-      <Header />
-      <PartnerHero />
-      <Models />
-      <Process />
-      <Benefits />
+      <Header onBookCallClick={handleBookCallClick} />
+      <PartnerHero onBookCallClick={handleBookCallClick} />
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+      />
     </div>
   );
 }

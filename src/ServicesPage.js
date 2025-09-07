@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Header } from "./HomePage";
 import BookingModal from "./components/BookingModal";
 import "./styles/ServicesPage.css";
@@ -17,38 +17,45 @@ function ServiceHero() {
   );
 }
 
-function ServiceRow({
-  reversed = false,
+const ServiceCard = React.forwardRef(({
   category,
   title,
   description,
-  bullets = [],
+  tags = [],
   image,
   alt,
   onBookCallClick,
-}) {
+  reversed = false,
+  isHighlighted = false,
+}, ref) => {
   return (
-    <section className={"sp-row" + (reversed ? " reversed" : "")}> 
-      <div className="sp-col text">
-        {category && <p className="sp-category">{category}</p>}
-        <h2 className="sp-row-title">{title}</h2>
-        <p className="sp-row-desc">{description}</p>
-        <div className="sp-offer">
-          <h3>What we offer:</h3>
-          <ul>
-            {bullets.map((b, i) => (
-              <li key={i}>{b}</li>
+    <section
+      ref={ref}
+      className={`sp-service-card ${isHighlighted ? 'highlighted' : ''}`}
+    >
+      <div className={`sp-card-content ${reversed ? 'reversed' : ''}`}>
+        <div className="sp-card-text">
+          <p className="sp-card-category">{category}</p>
+          <h2 className="sp-card-title">{title}</h2>
+          <p className="sp-card-description">{description}</p>
+          <div className="sp-card-tags">
+            {tags.map((tag, index) => (
+              <span key={index} className="sp-tag">{tag}</span>
             ))}
-          </ul>
+          </div>
+          <div className="sp-expert-quality">
+            <span className="sp-star">★</span>
+            <span>Expert quality guaranteed</span>
+          </div>
+          <button className="sp-get-started-btn" onClick={() => { window.location.hash = '#/contact'; setTimeout(() => { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }, 0); }}>get started</button>
         </div>
-        <button className="sp-btn-primary" onClick={() => { window.location.hash = '#/contact'; setTimeout(() => { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }, 0); }}>get started</button>
-      </div>
-      <div className="sp-col image">
-        <img src={image} alt={alt} />
+        <div className="sp-card-image">
+          <img src={image} alt={alt} />
+        </div>
       </div>
     </section>
   );
-}
+});
 
 function FinalCTA({ onBookCallClick }) {
   const handlePortfolioClick = () => {
@@ -61,11 +68,11 @@ function FinalCTA({ onBookCallClick }) {
   return (
     <section className="sp-final-cta">
       <div className="sp-final-inner">
-        <h2>Ready to get started?</h2>
+        <h2>Ready to Transform Your Business?</h2>
         <p>Let's discuss your project and how we can help you achieve your goals.</p>
         <div className="sp-cta-actions">
           <button className="sp-btn-primary" onClick={() => { window.location.hash = '#/contact'; setTimeout(() => { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }, 0); }}>get started</button>
-          <button className="sp-btn-secondary" onClick={handlePortfolioClick}>View Portfolio</button>
+          <button className="sp-btn-secondary" onClick={handlePortfolioClick}>View Our Works</button>
         </div>
       </div>
     </section>
@@ -74,82 +81,139 @@ function FinalCTA({ onBookCallClick }) {
 
 export default function ServicesPage() {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [highlightedService, setHighlightedService] = useState(null);
+
+  // Create refs for each service card
+  const serviceRefs = {
+    1: useRef(null),
+    2: useRef(null),
+    3: useRef(null),
+    4: useRef(null),
+  };
 
   const handleBookCallClick = () => {
     setIsBookingModalOpen(true);
   };
+
+  // Handle URL parameters and scroll to specific service
+  useEffect(() => {
+    const handleServiceNavigation = () => {
+      const hash = window.location.hash;
+      const serviceMatch = hash.match(/service=(\d+)/);
+      const serviceId = serviceMatch ? serviceMatch[1] : null;
+
+      if (serviceId && serviceRefs[serviceId]) {
+        setHighlightedService(parseInt(serviceId));
+
+        // Scroll to the specific service after a short delay
+        setTimeout(() => {
+          serviceRefs[serviceId].current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }, 500);
+
+        // Remove highlight after 3 seconds
+        setTimeout(() => {
+          setHighlightedService(null);
+        }, 3000);
+      }
+    };
+
+    // Check on initial load
+    handleServiceNavigation();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleServiceNavigation);
+
+    return () => {
+      window.removeEventListener('hashchange', handleServiceNavigation);
+    };
+  }, []);
 
   return (
     <div className="sp-container">
       <Header onBookCallClick={handleBookCallClick} />
       <ServiceHero />
 
-      <ServiceRow
-        category="Creative polishing, technical precision"
-        title="Post-Production"
-        description="From raw footage to a cinematic final cut — we edit, color grade, and design sound to bring your vision to life. Our post-production team handles everything from basic editing to complex visual effects."
-        bullets={[
-          "Video editing and color grading",
-          "Audio mixing and sound design",
-          "Motion graphics and animation",
-          "Visual effects and compositing",
-        ]}
-        image={ServicePageImg1}
-        alt="Post Production"
-        onBookCallClick={handleBookCallClick}
-      />
+      <div className="sp-services-grid">
+        <ServiceCard
+          ref={serviceRefs[1]}
+          category="Creative polishing, technical precision"
+          title="Post-Production & Creative"
+          description="Our post-production team combines technical expertise with creative vision to transform your raw footage into compelling visual stories. We use industry-standard software and cutting-edge techniques to deliver professional-quality results that exceed expectations."
+          tags={[
+            "Podcast Video editing",
+            "TikTok & Reels Editing",
+            "Photo Retouching & Enhancement",
+            "Professional Video Editing",
+            "VFX",
+            "2D Animation"
+          ]}
+          image={ServicePageImg1}
+          alt="Post Production & Creative"
+          onBookCallClick={handleBookCallClick}
+          reversed={false}
+          isHighlighted={highlightedService === 1}
+        />
 
-      <ServiceRow
-        reversed
-        category="Design that works and feels right"
-        title="Design & Experience"
-        description="We blend branding and UI/UX into one powerful creative layer — building visual identities and digital experiences that connect with people and perform across platforms."
-        bullets={[
-          "Brand identity and visual design",
-          "UI/UX design for web and mobile",
-          "Graphic design and marketing materials",
-          "Design systems and style guides",
-        ]}
-        image={ServicePageImg2}
-        alt="Design & Experience"
-        onBookCallClick={handleBookCallClick}
-      />
+        <ServiceCard
+          ref={serviceRefs[2]}
+          category="Inspired messaging, audience engagement"
+          title="Content & Marketing"
+          description="Our content and marketing strategies are designed to build meaningful connections with your audience. We combine data-driven insights with creative storytelling to develop content that not only looks great but drives real business results."
+          tags={[
+            "Social Media Management",
+            "Content creation"
+          ]}
+          image={ServicePageImg2}
+          alt="Content & Marketing"
+          onBookCallClick={handleBookCallClick}
+          reversed={true}
+          isHighlighted={highlightedService === 2}
+        />
 
-      <ServiceRow
-        category="Scalable, modern, and built to last"
-        title="Web & App Development"
-        description="We develop custom websites and apps using modern frameworks like React and Next.js — clean, fast, and tailored to your logic."
-        bullets={[
-          "Custom web development",
-          "Mobile app development",
-          "E‑commerce solutions",
-          "API development and integration",
-        ]}
-        image={ServicePageImg3}
-        alt="Web & App Development"
-        onBookCallClick={handleBookCallClick}
-      />
+        <ServiceCard
+          ref={serviceRefs[3]}
+          category="Creative expression, market recognition"
+          title="Design & Marketing"
+          description="Your brand is more than just a logo—it's the complete visual and emotional experience your customers have with your business. We create comprehensive brand systems that tell your story and connect with your audience on every touchpoint."
+          tags={[
+            "UX/UI Design",
+            "Graphic Design",
+            "Product Design",
+            "Social Media Design"
+          ]}
+          image={ServicePageImg3}
+          alt="Design & Marketing"
+          onBookCallClick={handleBookCallClick}
+          reversed={false}
+          isHighlighted={highlightedService === 3}
+        />
 
-      <ServiceRow
-        reversed
-        category="From concept to company"
-        title="Product Development"
-        description="We help you bring product ideas to life — from initial strategy and brand to full design, development, and launch. Our work on Diallock AI is proof, built in‑house, serving real users, scaling fast."
-        bullets={[
-          "Product strategy and planning",
-          "MVP development and testing",
-          "Full‑stack product development",
-          "Go‑to‑market strategy",
-        ]}
-        image={ServicePageImg4}
-        alt="Product Development"
-        onBookCallClick={handleBookCallClick}
-      />
+        <ServiceCard
+          ref={serviceRefs[4]}
+          category="Innovative problem-solving, seamless integration"
+          title="Digital Solutions"
+          description="In today's digital landscape, your website is often the first impression customers have of your business. We create fast, responsive, and user-friendly digital solutions that not only look stunning but drive conversions and business growth."
+          tags={[
+            "Web Development",
+            "Software Development",
+            "Website Maintenance",
+            "User Experience Optimization"
+          ]}
+          image={ServicePageImg4}
+          alt="Digital Solutions"
+          onBookCallClick={handleBookCallClick}
+          reversed={true}
+          isHighlighted={highlightedService === 4}
+        />
+      </div>
 
       <FinalCTA onBookCallClick={handleBookCallClick} />
-      <BookingModal 
-        isOpen={isBookingModalOpen} 
-        onClose={() => setIsBookingModalOpen(false)} 
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
       />
     </div>
   );
