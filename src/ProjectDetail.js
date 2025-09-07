@@ -1,35 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Header } from "./HomePage";
 import ProjectService from "./services/projectService";
 import "./styles/ProjectDetail.css";
 
 export default function ProjectDetail() {
-  const [projectId, setProjectId] = useState(null);
+  const { projectId } = useParams();
   const [project, setProject] = useState(null);
 
   useEffect(() => {
-    const readId = () => {
-      const hash = window.location.hash || "";
-      const idx = hash.indexOf("?");
-      let id = null;
-      if (idx !== -1) {
-        const params = new URLSearchParams(hash.substring(idx + 1));
-        id = params.get("id");
-      }
-      setProjectId(id);
-      
-      if (id) {
-        const projectData = ProjectService.getProjectById(id);
-        setProject(projectData);
-      }
-    };
-    readId();
-    window.addEventListener("hashchange", readId);
-    return () => window.removeEventListener("hashchange", readId);
-  }, []);
+    console.log("ProjectDetail - projectId from URL:", projectId);
+    if (projectId) {
+      const projectData = ProjectService.getProjectById(projectId);
+      console.log("ProjectDetail - loaded project data:", projectData);
+      setProject(projectData);
+    }
+  }, [projectId]);
 
   const handleBack = () => {
-    window.location.hash = "#/portfolio";
+    window.location.href = "/portfolio";
   };
 
   return (

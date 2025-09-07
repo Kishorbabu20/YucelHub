@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { Header } from "./HomePage";
 import BookingModal from "./components/BookingModal";
 import "./styles/ServicesPage.css";
@@ -47,7 +48,7 @@ const ServiceCard = React.forwardRef(({
             <span className="sp-star">★</span>
             <span>Expert quality guaranteed</span>
           </div>
-          <button className="sp-get-started-btn" onClick={() => { window.location.hash = '#/contact'; setTimeout(() => { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }, 0); }}>get started</button>
+          <button className="sp-get-started-btn" onClick={() => { window.location.href = '/contact'; }}>get started</button>
         </div>
         <div className="sp-card-image">
           <img src={image} alt={alt} />
@@ -59,10 +60,7 @@ const ServiceCard = React.forwardRef(({
 
 function FinalCTA({ onBookCallClick }) {
   const handlePortfolioClick = () => {
-    window.location.hash = '#/portfolio';
-    setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    }, 0);
+    window.location.href = '/portfolio';
   };
 
   return (
@@ -71,7 +69,7 @@ function FinalCTA({ onBookCallClick }) {
         <h2>Ready to Transform Your Business?</h2>
         <p>Let's discuss your project and how we can help you achieve your goals.</p>
         <div className="sp-cta-actions">
-          <button className="sp-btn-primary" onClick={() => { window.location.hash = '#/contact'; setTimeout(() => { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); }, 0); }}>get started</button>
+          <button className="sp-btn-primary" onClick={() => { window.location.href = '/contact'; }}>get started</button>
           <button className="sp-btn-secondary" onClick={handlePortfolioClick}>View Our Works</button>
         </div>
       </div>
@@ -80,6 +78,7 @@ function FinalCTA({ onBookCallClick }) {
 }
 
 export default function ServicesPage() {
+  const location = useLocation();
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [highlightedService, setHighlightedService] = useState(null);
 
@@ -98,9 +97,8 @@ export default function ServicesPage() {
   // Handle URL parameters and scroll to specific service
   useEffect(() => {
     const handleServiceNavigation = () => {
-      const hash = window.location.hash;
-      const serviceMatch = hash.match(/service=(\d+)/);
-      const serviceId = serviceMatch ? serviceMatch[1] : null;
+      const urlParams = new URLSearchParams(location.search);
+      const serviceId = urlParams.get('service');
 
       if (serviceId && serviceRefs[serviceId]) {
         setHighlightedService(parseInt(serviceId));
@@ -122,14 +120,7 @@ export default function ServicesPage() {
 
     // Check on initial load
     handleServiceNavigation();
-
-    // Listen for hash changes
-    window.addEventListener('hashchange', handleServiceNavigation);
-
-    return () => {
-      window.removeEventListener('hashchange', handleServiceNavigation);
-    };
-  }, []);
+  }, [location.search]);
 
   return (
     <div className="sp-container">

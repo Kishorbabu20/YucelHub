@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./HomePage";
 import ServicesPage from "./ServicesPage";
 import AboutPage from "./AboutPage";
@@ -13,42 +14,27 @@ import AdminPage from "./admin/AdminPage";
 import "./styles/HomePage.css";
 
 function AppRouter() {
-  const [route, setRoute] = useState(window.location.hash || "#/home");
-
-  useEffect(() => {
-    const onHashChange = () => setRoute(window.location.hash || "#/home");
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
-
-  if (route.startsWith("#/services")) {
-    return <ServicesPage />;
-  }
-  if (route === "#/about") {
-    return <AboutPage />;
-  }
-  if (route === "#/partner") {
-    return <PartnerPage />;
-  }
-  if (route === "#/career") {
-    return <CareerPage />;
-  }
-  if (route.startsWith("#/job-application")) {
-    return <JobApplicationPage />;
-  }
-  if (route === "#/portfolio") {
-    return <Portfolio />;
-  }
-  if (route.startsWith("#/project")) {
-    return <ProjectDetail />;
-  }
-  if (route === "#/contact") {
-    return <ContactPage />;
-  }
-  if (route === "#/admin") {
-    return <AdminPage />;
-  }
-  return <HomePage />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/services/:serviceId" element={<ServicesPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/partner" element={<PartnerPage />} />
+        <Route path="/career" element={<CareerPage />} />
+        <Route path="/job-application" element={<JobApplicationPage />} />
+        <Route path="/job-application/:jobId" element={<JobApplicationPage />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/project/:projectId" element={<ProjectDetail />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        {/* Catch all route - redirect to home */}
+        <Route path="*" element={<HomePage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 const container = document.getElementById("root");

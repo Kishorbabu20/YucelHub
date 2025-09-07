@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { Header } from "./HomePage";
 import "./styles/JobApplicationPage.css";
 import UploadIcon from "./assets/upload.png";
@@ -11,6 +12,7 @@ import emailjs from 'emailjs-com';
 import { getJobsFromStorage } from "./admin/jobService";
 
 function JobApplicationPage() {
+    const location = useLocation();
     const applicationFormRef = useRef(null);
     const [job, setJob] = useState({
         title: 'Job Position',
@@ -37,9 +39,12 @@ function JobApplicationPage() {
     });
 
     useEffect(() => {
-        // Get job ID from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
+        // Get job ID from URL parameters using React Router
+        const urlParams = new URLSearchParams(location.search);
         const jobId = urlParams.get('id');
+
+        console.log("JobApplicationPage - URL search:", location.search);
+        console.log("JobApplicationPage - Job ID from URL:", jobId);
 
         if (jobId) {
             loadJob(jobId);
@@ -47,45 +52,105 @@ function JobApplicationPage() {
             // Fallback to first available job
             loadJobs();
         }
-    }, []);
+    }, [location.search]);
 
     const loadJob = (jobId) => {
         try {
             const jobs = getJobsFromStorage();
-            const selectedJob = jobs.find(job => job.id === jobId);
+            console.log("JobApplicationPage - All jobs from storage:", jobs);
+            console.log("JobApplicationPage - Looking for job ID:", jobId, "Type:", typeof jobId);
+
+            const selectedJob = jobs.find(job => {
+                console.log("Comparing job.id:", job.id, "Type:", typeof job.id, "with jobId:", jobId, "Type:", typeof jobId);
+                return job.id == jobId; // Use == instead of === to handle string/number comparison
+            });
+
+            console.log("JobApplicationPage - Selected job:", selectedJob);
+
             if (selectedJob) {
                 setJob(selectedJob);
             } else {
-                // Fallback to default job
-                setJob({
-                    id: "default",
-                    title: "Video Editor & Motion Designer",
-                    company: "Yucel Hub",
-                    location: "Coimbatore, India",
-                    postedDate: "09/06/2025",
-                    description: "We are a fast-growing marketing agency specializing in digital content, and we're looking for a creative and skilled Video Editor and Motion Designer to join our dynamic team.",
-                    roleSummary: "As a Video Editor and Motion Designer, you will be responsible for creating high-quality video content that tells compelling stories and engages our audience. You'll work closely with our creative team to bring ideas to life through video editing, motion graphics, and visual effects.",
-                    responsibilities: [
-                        "Edit and assemble raw video footage into polished, engaging content",
-                        "Design and animate 2D and 3D motion graphics, including logos, lower thirds, and titles",
-                        "Incorporate music, sound effects, and dialogue to enhance video content",
-                        "Collaborate with creative, marketing, and product teams to understand project requirements",
-                        "Develop storyboards and style frames for video projects",
-                        "Ensure all content aligns with brand guidelines and maintains consistency",
-                        "Manage multiple projects simultaneously while meeting deadlines",
-                        "Maintain and organize project files and assets",
-                        "Stay up-to-date with industry trends and new editing techniques",
-                        "Prepare and optimize final video files for various digital platforms"
-                    ],
-                    qualifications: [
-                        "Proven experience as a Video Editor and Motion Designer with a strong portfolio",
-                        "High proficiency in Adobe Creative Suite (Premiere Pro, After Effects, Photoshop, Illustrator)",
-                        "Excellent sense of timing, visual awareness, and a keen eye for detail",
-                        "Experience with color correction, color grading, and audio mixing",
-                        "Ability to work independently and collaboratively in a fast-paced environment",
-                        "Exceptional time management, organizational, and problem-solving skills"
-                    ]
-                });
+                // Handle fallback job IDs from CareerPage
+                if (jobId === "video-editor-1") {
+                    setJob({
+                        id: "video-editor-1",
+                        title: "Video Editor & Motion Designer",
+                        company: "Yucel Hub",
+                        location: "Hybrid",
+                        postedDate: new Date().toLocaleDateString(),
+                        description: "Create compelling video content and motion graphics for our clients across various industries.",
+                        roleSummary: "As a Video Editor and Motion Designer, you will be responsible for creating high-quality video content that tells compelling stories and engages our audience.",
+                        responsibilities: [
+                            "Edit and assemble raw video footage into polished, engaging content",
+                            "Design and animate 2D and 3D motion graphics, including logos, lower thirds, and titles",
+                            "Incorporate music, sound effects, and dialogue to enhance video content",
+                            "Collaborate with creative, marketing, and product teams to understand project requirements",
+                            "Develop storyboards and style frames for video projects"
+                        ],
+                        qualifications: [
+                            "Proven experience as a Video Editor and Motion Designer with a strong portfolio",
+                            "High proficiency in Adobe Creative Suite (Premiere Pro, After Effects, Photoshop, Illustrator)",
+                            "Excellent sense of timing, visual awareness, and a keen eye for detail",
+                            "Experience with color correction, color grading, and audio mixing",
+                            "Ability to work independently and collaboratively in a fast-paced environment"
+                        ]
+                    });
+                } else if (jobId === "project-manager-1") {
+                    setJob({
+                        id: "project-manager-1",
+                        title: "Project Manager",
+                        company: "Yucel Hub",
+                        location: "On Site",
+                        postedDate: new Date().toLocaleDateString(),
+                        description: "Lead cross-functional teams and ensure successful project delivery for our clients.",
+                        roleSummary: "As a Project Manager, you will be responsible for leading cross-functional teams and ensuring successful project delivery.",
+                        responsibilities: [
+                            "Lead cross-functional teams and ensure successful project delivery",
+                            "Manage project timelines, budgets, and resources",
+                            "Coordinate with clients and internal teams",
+                            "Track project progress and report status updates",
+                            "Identify and mitigate project risks"
+                        ],
+                        qualifications: [
+                            "Proven experience in project management",
+                            "Strong leadership and communication skills",
+                            "Experience with project management tools",
+                            "Ability to manage multiple projects simultaneously",
+                            "Excellent problem-solving and decision-making skills"
+                        ]
+                    });
+                } else {
+                    // Fallback to default job
+                    setJob({
+                        id: "default",
+                        title: "Video Editor & Motion Designer",
+                        company: "Yucel Hub",
+                        location: "Coimbatore, India",
+                        postedDate: "09/06/2025",
+                        description: "We are a fast-growing marketing agency specializing in digital content, and we're looking for a creative and skilled Video Editor and Motion Designer to join our dynamic team.",
+                        roleSummary: "As a Video Editor and Motion Designer, you will be responsible for creating high-quality video content that tells compelling stories and engages our audience. You'll work closely with our creative team to bring ideas to life through video editing, motion graphics, and visual effects.",
+                        responsibilities: [
+                            "Edit and assemble raw video footage into polished, engaging content",
+                            "Design and animate 2D and 3D motion graphics, including logos, lower thirds, and titles",
+                            "Incorporate music, sound effects, and dialogue to enhance video content",
+                            "Collaborate with creative, marketing, and product teams to understand project requirements",
+                            "Develop storyboards and style frames for video projects",
+                            "Ensure all content aligns with brand guidelines and maintains consistency",
+                            "Manage multiple projects simultaneously while meeting deadlines",
+                            "Maintain and organize project files and assets",
+                            "Stay up-to-date with industry trends and new editing techniques",
+                            "Prepare and optimize final video files for various digital platforms"
+                        ],
+                        qualifications: [
+                            "Proven experience as a Video Editor and Motion Designer with a strong portfolio",
+                            "High proficiency in Adobe Creative Suite (Premiere Pro, After Effects, Photoshop, Illustrator)",
+                            "Excellent sense of timing, visual awareness, and a keen eye for detail",
+                            "Experience with color correction, color grading, and audio mixing",
+                            "Ability to work independently and collaboratively in a fast-paced environment",
+                            "Exceptional time management, organizational, and problem-solving skills"
+                        ]
+                    });
+                }
             }
         } catch (error) {
             console.error("Error loading job:", error);

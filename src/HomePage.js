@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import IconImg from "./assets/Icon.png";
 import HeroImg from "./assets/Hero.png";
 import TeamImg1 from "./assets/Team.png";
@@ -15,33 +16,28 @@ import "./styles/HomePage.css";
 
 
 export const Header = ({ onBookCallClick }) => {
-  const [hash, setHash] = useState(window.location.hash || "#/home");
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
-  useEffect(() => {
-    const onHashChange = () => setHash(window.location.hash || "#/home");
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
 
-  const isActive = (target) => {
-    if (target === "#/home") {
-      return hash === "" || hash === "#/home" || (!hash.startsWith("#/") && hash !== "#/services");
+  const isActive = (path) => {
+    if (path === "/home" || path === "/") {
+      return location.pathname === "/" || location.pathname === "/home";
     }
-    return hash === target || hash.startsWith(target);
+    return location.pathname === path || location.pathname.startsWith(path);
   };
 
   return (
     <header className={"header"}>
       <div className="top-bar">
         {/* YucelHub Logo with stylized Y icon */}
-        <a href="#/home" className="logo-link">
+        <Link to="/" className="logo-link">
           <div className="logo-container">
             <img src={IconImg} alt="Yucel Hub" className="logo-image" />
             <div className="logo-text">
               <span className="logo-text-large">YucelHub</span>
             </div>
           </div>
-        </a>
+        </Link>
 
         {/* Mobile menu toggle */}
         <button
@@ -55,11 +51,11 @@ export const Header = ({ onBookCallClick }) => {
 
         {/* Navigation links */}
         <nav className={"nav-links" + (menuOpen ? " open" : "")} onClick={() => setMenuOpen(false)}>
-          <a href="#/services" className={isActive("#/services") ? "active" : ""}>Services</a>
-          <a href="#/portfolio" className={isActive("#/portfolio") ? "active" : ""}>Portfolio</a>
-          <a href="#/partner" className={isActive("#/partner") ? "active" : ""}>Partner With Us</a>
-          <a href="#/about" className={isActive("#/about") ? "active" : ""}>About Us</a>
-          <a href="#/career" className={isActive("#/career") ? "active" : ""}>Career</a>
+          <Link to="/services" className={isActive("/services") ? "active" : ""}>Services</Link>
+          <Link to="/portfolio" className={isActive("/portfolio") ? "active" : ""}>Portfolio</Link>
+          <Link to="/partner" className={isActive("/partner") ? "active" : ""}>Partner With Us</Link>
+          <Link to="/about" className={isActive("/about") ? "active" : ""}>About Us</Link>
+          <Link to="/career" className={isActive("/career") ? "active" : ""}>Career</Link>
           {/* Book a Call inside mobile menu */}
           <button className="btn-primary book-call-mobile" onClick={onBookCallClick}>
             <span className="phone-icon" aria-hidden="true">
@@ -111,7 +107,7 @@ const HeroSection = ({ onBookCallClick }) => (
             <p>Pay only for your team, not the overhead.</p>
           </div>
           <div className="hero-buttons">
-            <button className="btn-primary" onClick={() => { window.location.hash = '#/contact'; setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }), 0); }}>Build your team</button>
+            <Link to="/contact" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>Build your team</Link>
             <button className="btn-secondary" onClick={onBookCallClick}>Book a free call</button>
           </div>
         </div>
@@ -208,7 +204,7 @@ const PortfolioSection = () => {
   };
 
   const goToProject = (id) => {
-    window.location.hash = `#/project?id=${id}`;
+    window.location.href = `/project/${id}`;
   };
 
   // Show loading state if no projects
@@ -300,10 +296,7 @@ const ServicesSection = () => {
 
   const handleServiceImageClick = (serviceId) => {
     // Navigate to services page with specific service highlighted
-    window.location.hash = `#/services?service=${serviceId}`;
-    setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    }, 0);
+    window.location.href = `/services?service=${serviceId}`;
   };
 
   return (
@@ -350,17 +343,10 @@ const ServicesSection = () => {
 
 const WhatWeDoSection = ({ onBookCallClick }) => {
   const handleServicesClick = () => {
-    window.location.hash = '#/services';
-    // Ensure we land at the top of Services page (header visible)
-    setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    }, 0);
+    // Navigation will be handled by React Router Link
   };
   const handleContactClick = () => {
-    window.location.hash = '#/contact';
-    setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    }, 0);
+    // Navigation will be handled by React Router Link
   };
 
   return (
@@ -380,8 +366,8 @@ const WhatWeDoSection = ({ onBookCallClick }) => {
           <p className="conclusion">At Yucel Hub, we simplify the complex — giving you flexible, scalable teams that feel in-house, without the overhead, delays, or hiring headaches.</p>
 
           <div className="buttons-group">
-            <button className="btn-primary" onClick={handleContactClick}>Let's Talk</button>
-            <button className="btn-secondary" onClick={handleServicesClick}>Our Services</button>
+            <Link to="/contact" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>Let's Talk</Link>
+            <Link to="/services" className="btn-secondary" style={{ textDecoration: 'none', display: 'inline-block' }}>Our Services</Link>
           </div>
         </div>
       </div>

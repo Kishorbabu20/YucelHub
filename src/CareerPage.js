@@ -108,6 +108,7 @@ function OpenPositions({
         // Fallback to default positions if admin system fails
         setPositions([
           {
+            id: "video-editor-1",
             title: "Video Editor & Motion Designer",
             department: "Production",
             location: "Hybrid",
@@ -115,6 +116,7 @@ function OpenPositions({
             description: "Create compelling video content and motion graphics for our clients across various industries.",
           },
           {
+            id: "project-manager-1",
             title: "Project Manager",
             department: "Operations",
             location: "On Site",
@@ -193,7 +195,7 @@ function OpenPositions({
                       </div>
                       <button className="cr-apply-btn" onClick={() => {
                         // Redirect to job application page with job ID
-                        window.location.hash = `#/job-application?id=${p.id || 'default'}`;
+                        window.location.href = `/job-application?id=${p.id || 'default'}`;
                       }}>Apply Now</button>
                     </div>
                   </div>

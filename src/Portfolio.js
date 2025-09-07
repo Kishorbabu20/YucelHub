@@ -44,7 +44,7 @@ function PortfolioFilters({ activeFilter, setActiveFilter, projects }) {
 function PortfolioGrid({ projects, loading }) {
 
   const goToProject = (id) => {
-    window.location.hash = `#/project?id=${id}`;
+    window.location.href = `/project/${id}`;
   };
 
   return (
