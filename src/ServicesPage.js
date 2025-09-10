@@ -3,10 +3,10 @@ import { useLocation } from "react-router-dom";
 import { Header } from "./HomePage";
 import BookingModal from "./components/BookingModal";
 import "./styles/ServicesPage.css";
-import ServicePageImg1 from "./assets/Servicepage.png";
-import ServicePageImg2 from "./assets/Servicepage2.png";
-import ServicePageImg3 from "./assets/Servicepage3.png";
-import ServicePageImg4 from "./assets/Servicepage4.png";
+import ServiceImg0 from "./assets/Service.png";
+import ServiceImg1 from "./assets/Service1.png";
+import ServiceImg2 from "./assets/Service2.png";
+import ServiceImg3 from "./assets/Service3.png";
 
 function ServiceHero() {
   return (
@@ -141,7 +141,7 @@ export default function ServicesPage() {
             "VFX",
             "2D Animation"
           ]}
-          image={ServicePageImg1}
+          image={ServiceImg0}
           alt="Post Production & Creative"
           onBookCallClick={handleBookCallClick}
           reversed={false}
@@ -157,7 +157,7 @@ export default function ServicesPage() {
             "Social Media Management",
             "Content creation"
           ]}
-          image={ServicePageImg2}
+          image={ServiceImg1}
           alt="Content & Marketing"
           onBookCallClick={handleBookCallClick}
           reversed={true}
@@ -175,7 +175,7 @@ export default function ServicesPage() {
             "Product Design",
             "Social Media Design"
           ]}
-          image={ServicePageImg3}
+          image={ServiceImg2}
           alt="Design & Marketing"
           onBookCallClick={handleBookCallClick}
           reversed={false}
@@ -193,7 +193,7 @@ export default function ServicesPage() {
             "Website Maintenance",
             "User Experience Optimization"
           ]}
-          image={ServicePageImg4}
+          image={ServiceImg3}
           alt="Digital Solutions"
           onBookCallClick={handleBookCallClick}
           reversed={true}

@@ -92,6 +92,24 @@ const HeroSection = ({ onBookCallClick }) => (
       <div className="hero-bottom-content">
         <div className="hero-image-container">
           <div className="hero-image-background">
+            {/* Floating badges */}
+            <div className="hero-badge hero-badge--left">
+              <span className="emoji">🌍</span>
+              <span className="text">Offshore In-House Team</span>
+            </div>
+            <div className="hero-badge hero-badge--right-top">
+              <span className="emoji">💰</span>
+              <span className="text">Save $60,000+ Annually</span>
+            </div>
+            <div className="hero-badge hero-badge--left-bottom">
+              <span className="emoji">🎨</span>
+              <span className="text">On-Time Design & Editing</span>
+            </div>
+            <div className="hero-badge hero-badge--right-bottom">
+              <span className="emoji">🕊</span>
+              <span className="text">Advanced Communication & Monitoring</span>
+            </div>
+
             <img
               src={HeroImg}
               alt="Yucel Hub hero"
@@ -330,7 +348,7 @@ const ServicesSection = () => {
                   </div>
                 </div>
                 <div className="service-image" onClick={() => handleServiceImageClick(service.id)} style={{ cursor: 'pointer' }}>
-                  <img src={ServiceImg3} alt={service.title} />
+                  <img src={service.id === 1 ? ServiceImg0 : service.id === 2 ? ServiceImg1 : service.id === 3 ? ServiceImg2 : ServiceImg3} alt={service.title} />
                 </div>
               </div>
             )}
@@ -484,11 +502,12 @@ function HomePage() {
       <HeroSection onBookCallClick={handleBookCallClick} />
       <TeamSection />
       <LogoBanner />
+      <TestimonialsSection />
       <PortfolioSection />
       <ServicesSection />
       <WhatWeDoSection onBookCallClick={handleBookCallClick} />
       <StatsSection />
-      <TestimonialsSection />
+
       <BookingModal
         isOpen={isBookingModalOpen}
         onClose={() => setIsBookingModalOpen(false)}

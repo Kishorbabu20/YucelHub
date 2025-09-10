@@ -72,10 +72,22 @@
 .cr-culture-text p {
   color: #444;
   font-family: 'Sora', sans-serif;
+  line-height: 1.8; /* improve line spacing */
 }
 
 .cr-culture-text ul {
   margin: 10px 0 0 16px;
+  line-height: 1.9; /* extra spacing between bullet items */
+}
+
+/* Highlight brand name */
+.cr-culture-text p strong {
+  color: #ff6600;
+}
+
+/* Make bullet markers orange (modern browsers support ::marker) */
+.cr-culture-text ul li::marker {
+  color: #ff6600;
 }
 
 .cr-culture-image img {

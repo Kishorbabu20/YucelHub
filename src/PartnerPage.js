@@ -10,10 +10,10 @@ function PartnerHero({ onBookCallClick }) {
       <div className="pt-hero-content">
         <div className="pt-hero-text">
           <h1 className="pt-title">
-            <span className="pt-highlight">Earn</span> commissions for every successful referral
+            <span className="pt-highlight">Earn</span> lifetime recurring communication
           </h1>
-          <p className="pt-sub">Refer your clients and connections to us and earn for every successful project. Join our partner program and start earning today.</p>
-          <button className="pt-btn-primary" onClick={onBookCallClick}>Join Now — it's free</button>
+          <p className="pt-sub">We take care of the communicationend to end make your income feels effortless</p>
+          <button className="pt-btn-primary" onClick={onBookCallClick}>Join Now</button>
         </div>
         <div className="pt-hero-image">
           <img src={PartnerImg} alt="Partnership handshake" />

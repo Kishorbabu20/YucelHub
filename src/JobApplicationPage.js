@@ -500,13 +500,12 @@ function JobApplicationPage() {
                             </div>
 
                             <div className="jap-form-group">
-                                <label>Cover letter *</label>
+                                <label>Cover letter (optional)</label>
                                 <textarea
                                     placeholder="Tell us why you are interested in this position and what makes you great fit for our team..."
                                     value={applicationForm.coverLetter}
                                     onChange={(e) => handleFormChange('coverLetter', e.target.value)}
                                     rows={4}
-                                    required
                                 />
                             </div>
 

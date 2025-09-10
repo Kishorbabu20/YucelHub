@@ -279,8 +279,8 @@ body {
 /* Remove orange panel/grid; keep simple image wrapper */
 .hero-image-background {
   position: relative;
-  width: 450px;
-  height: 550px;
+  width: 380px;
+  height: 450px;
   background: transparent;
   border-radius: 0;
   display: flex;
@@ -290,11 +290,152 @@ body {
   transform: none;
 }
 
+/* Floating hero badges */
+.hero-badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  color: #111;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 10px 14px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  z-index: 2;
+}
+
+.hero-badge .emoji {
+  font-size: 18px;
+}
+
+.hero-badge--left {
+  left: -140px;
+  top: 30%;
+}
+
+.hero-badge--right-top {
+  right: -170px;
+  top: 20%;
+}
+
+.hero-badge--left-bottom {
+  left: -110px;
+  bottom: 15%;
+}
+
+.hero-badge--right-bottom {
+  right: -220px;
+  bottom: 5%;
+}
+
+/* Floating animation */
+@keyframes hero-floatY {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.hero-badge {
+  will-change: transform;
+  animation: hero-floatY 6s ease-in-out infinite;
+}
+
+.hero-badge--right-top {
+  animation-delay: .4s;
+}
+
+.hero-badge--left-bottom {
+  animation-delay: .8s;
+}
+
+.hero-badge--right-bottom {
+  animation-delay: 1.2s;
+}
+
+@media (max-width: 1200px) {
+  .hero-badge {
+    font-size: 13px;
+    padding: 9px 12px;
+  }
+
+  .hero-badge--left {
+    left: -110px;
+  }
+
+  .hero-badge--right-top {
+    right: -130px;
+  }
+
+  .hero-badge--left-bottom {
+    left: -90px;
+  }
+
+  .hero-badge--right-bottom {
+    right: -170px;
+  }
+}
+
+@media (max-width: 992px) {
+  .hero-image-background {
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    position: static;
+    margin: 8px auto;
+    display: inline-flex;
+    animation: none;
+  }
+
+  .hero-image-background {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+  }
+
+  /* Prevent overlap: stack and scale image on mobile */
+  .hero-bottom-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .hero-image {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+  }
+
+  .hero-description-container {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .hero-description p {
+    text-align: center;
+  }
+}
+
 .hero-image {
-  width: 450px;
-  height: 550px;
+  width: 460px;
+  height: 560px;
   object-fit: cover;
   border-radius: 16px;
+  will-change: transform;
+  animation: hero-floatY 8s ease-in-out infinite;
+  animation-delay: .2s;
 }
 
 .hero-description-container {
@@ -422,7 +563,7 @@ body {
 }
 
 .section-header {
-  font-size: 20px;
+  font-size: 40px;
   font-weight: 600;
   color: #ff6600;
 
@@ -861,7 +1002,7 @@ body {
 
 
 .what-we-do-section .section-title {
-  font-size: 2.5rem;
+  font-size: 4rem;
   font-weight: 800;
   color: #333;
   margin-bottom: 30px;
@@ -967,6 +1108,36 @@ body {
 .buttons-group {
   display: flex;
   gap: 20px;
+}
+
+/* Prevent button overlap in tighter viewports */
+.buttons-group .btn-primary,
+.buttons-group .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 !important;
+  position: relative;
+  z-index: 0;
+  white-space: nowrap;
+}
+
+/* Stronger scoping for What We Do CTA buttons */
+.what-we-do-section .buttons-group {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.what-we-do-section .buttons-group a.btn-primary,
+.what-we-do-section .buttons-group a.btn-secondary,
+.what-we-do-section .buttons-group .btn-primary,
+.what-we-do-section .buttons-group .btn-secondary {
+  flex: 1 1 160px;
+  max-width: 100%;
+  width: auto;
+  box-sizing: border-box;
+  position: static;
 }
 
 .buttons-group .btn-primary {
@@ -1617,6 +1788,7 @@ body {
 
   .buttons-group {
     justify-content: center;
+    flex-wrap: wrap; /* allow wrapping to avoid overlap */
   }
 
   /* Testimonials Section Responsive */
@@ -1985,5 +2157,51 @@ body {
 
   .stat-label {
     font-size: 1rem;
+  }
+}
+
+/* Mobile hotfix: ensure hero image never overlaps text */
+@media (max-width: 768px) {
+  .hero-bottom-content {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 24px !important;
+  }
+
+  .hero-image-background {
+    width: auto !important;
+    height: auto !important;
+    margin: 0 auto !important;
+  }
+
+  .hero-image {
+    width: 100% !important;
+    max-width: 280px !important;
+    height: auto !important;
+    animation: none !important;
+  }
+
+  .hero-description-container {
+    flex: 0 0 auto !important;
+    max-width: 100% !important;
+  }
+
+  .hero-description p {
+    text-align: center !important;
+  }
+}
+
+/* Mobile: smaller hero buttons */
+@media (max-width: 768px) {
+  .hero-buttons {
+    gap: 12px !important;
+  }
+
+  .hero-buttons .btn-primary,
+  .hero-buttons .btn-secondary {
+    max-width: 240px !important;
+    padding: 12px 20px !important;
+    font-size: 1rem !important;
+    border-radius: 8px !important;
   }
 }
