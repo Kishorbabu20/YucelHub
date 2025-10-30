@@ -56,7 +56,18 @@
   background: #ff6500;
   color: white;
   border-radius: 5px;
-  
+
+}
+
+.logout-btn {
+  margin-top: auto;
+  border-top: 1px solid #34495e;
+  padding-top: 16px;
+}
+
+.logout-btn:hover {
+  background: #dc3545;
+  color: white;
 }
 
 .nav-icon {

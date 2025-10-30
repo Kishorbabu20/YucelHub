@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
 import ProjectService from "../services/projectService";
 import { saveJobsToStorage, getJobsFromStorage } from "./jobService";
+import { saveTestimonialsToStorage, getTestimonialsFromStorage } from "./testimonialService";
+import ImageCropper from "../components/ImageCropper";
+import "../styles/ImageCropper.css";
 import "./AdminPage.css";
 
 export default function AdminPage() {
+  const handleLogout = () => {
+    localStorage.removeItem("adminLoggedIn");
+    window.location.href = "/admin"; // Redirect to login
+  };
+
   const [activeTab, setActiveTab] = useState("portfolio");
   const [projects, setProjects] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [testimonials, setTestimonials] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
@@ -30,6 +39,9 @@ export default function AdminPage() {
   const [isAddJobModalOpen, setIsAddJobModalOpen] = useState(false);
   const [isEditJobModalOpen, setIsEditJobModalOpen] = useState(false);
   const [editingJob, setEditingJob] = useState(null);
+  const [isAddTestimonialModalOpen, setIsAddTestimonialModalOpen] = useState(false);
+  const [isEditTestimonialModalOpen, setIsEditTestimonialModalOpen] = useState(false);
+  const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [jobFormData, setJobFormData] = useState({
     title: "",
     department: "Design",
@@ -48,6 +60,25 @@ export default function AdminPage() {
     postedDate: new Date().toLocaleDateString()
   });
 
+  const [testimonialFormData, setTestimonialFormData] = useState({
+    name: "",
+    position: "",
+    company: "",
+    review: "",
+    rating: 5,
+    avatarUrl: "",
+    avatarFile: null,
+    isUploading: false
+  });
+
+  // Image cropping states
+  const [cropperState, setCropperState] = useState({
+    isOpen: false,
+    imageSrc: null,
+    aspect: 1,
+    onCropComplete: null
+  });
+
   const categories = ["All", "Video Editing", "UI/UX", "Branding"];
   const departments = ["Design", "Production", "Development", "Marketing", "Other"];
   const jobTypes = ["Full-time", "Part-time", "Contract", "Internship", "Other"];
@@ -57,6 +88,11 @@ export default function AdminPage() {
     // Load existing projects from storage
     const existingProjects = ProjectService.getAllProjects();
     setProjects(existingProjects || []);
+
+    // Load existing testimonials from storage
+    const existingTestimonials = getTestimonialsFromStorage();
+    console.log('Loading testimonials from storage:', existingTestimonials); // Debug log
+    setTestimonials(existingTestimonials || []);
 
     // Load existing jobs from storage using jobService
     const existingJobs = getJobsFromStorage();
@@ -180,33 +216,79 @@ export default function AdminPage() {
     }
   };
 
+  const openCropper = (file, aspect, onCropComplete) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCropperState({
+        isOpen: true,
+        imageSrc: reader.result,
+        aspect: aspect,
+        onCropComplete: onCropComplete
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCropComplete = (croppedBlob) => {
+    if (cropperState.onCropComplete) {
+      cropperState.onCropComplete(croppedBlob);
+    }
+    setCropperState({ isOpen: false, imageSrc: null, aspect: 1, onCropComplete: null });
+  };
+
+  const closeCropper = () => {
+    setCropperState({ isOpen: false, imageSrc: null, aspect: 1, onCropComplete: null });
+  };
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData(prev => ({ ...prev, isUploading: true, imageFile: file }));
+      // Open cropper for main project image (square aspect ratio)
+      openCropper(file, 16/9, async (croppedBlob) => {
+        setFormData(prev => ({ ...prev, isUploading: true }));
 
-      try {
-        // Upload to Cloudinary
-        const cloudinaryUrl = await uploadToCloudinary(file);
-        setFormData(prev => ({
-          ...prev,
-          imageUrl: cloudinaryUrl,
-          isUploading: false
-        }));
-      } catch (error) {
-        alert('Failed to upload image. Please try again.');
-        setFormData(prev => ({ ...prev, isUploading: false }));
-      }
+        try {
+          // Upload cropped image to Cloudinary
+          const cloudinaryUrl = await uploadToCloudinary(croppedBlob);
+          setFormData(prev => ({
+            ...prev,
+            imageUrl: cloudinaryUrl,
+            isUploading: false
+          }));
+        } catch (error) {
+          alert('Failed to upload image. Please try again.');
+          setFormData(prev => ({ ...prev, isUploading: false }));
+        }
+      });
     }
   };
 
   const handleGalleryUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
-      setFormData(prev => ({ ...prev, isUploading: true }));
+      // Process each file through cropper
+      const processFile = (file) => {
+        return new Promise((resolve) => {
+          openCropper(file, 16/9, (croppedBlob) => {
+            resolve(croppedBlob);
+          });
+        });
+      };
 
       try {
-        const uploadPromises = files.map(file => uploadToCloudinary(file));
+        setFormData(prev => ({ ...prev, isUploading: true }));
+
+        // For gallery images, we'll crop them one by one
+        // Note: This is a simplified approach. In a real app, you might want to handle multiple crops sequentially
+        const croppedBlobs = [];
+        for (const file of files) {
+          const croppedBlob = await new Promise((resolve) => {
+            openCropper(file, 16/9, (blob) => resolve(blob));
+          });
+          croppedBlobs.push(croppedBlob);
+        }
+
+        const uploadPromises = croppedBlobs.map(blob => uploadToCloudinary(blob));
         const cloudinaryUrls = await Promise.all(uploadPromises);
 
         setFormData(prev => ({
@@ -331,6 +413,26 @@ export default function AdminPage() {
     setIsAddJobModalOpen(true);
   };
 
+  const openAddTestimonialModal = () => {
+    resetTestimonialForm();
+    setIsAddTestimonialModalOpen(true);
+  };
+
+  const openEditTestimonialModal = (testimonial) => {
+    setEditingTestimonial(testimonial);
+    setTestimonialFormData({
+      name: testimonial.name,
+      position: testimonial.position,
+      company: testimonial.company,
+      review: testimonial.review,
+      rating: testimonial.rating,
+      avatarUrl: testimonial.avatarUrl,
+      avatarFile: null,
+      isUploading: false
+    });
+    setIsEditTestimonialModalOpen(true);
+  };
+
   const openEditJobModal = (job) => {
     setEditingJob(job);
     setJobFormData({
@@ -370,6 +472,19 @@ export default function AdminPage() {
       qualificationsInput: "",
       company: "Yucel Hub",
       postedDate: new Date().toLocaleDateString()
+    });
+  };
+
+  const resetTestimonialForm = () => {
+    setTestimonialFormData({
+      name: "",
+      position: "",
+      company: "",
+      review: "",
+      rating: 5,
+      avatarUrl: "",
+      avatarFile: null,
+      isUploading: false
     });
   };
 
@@ -493,6 +608,87 @@ export default function AdminPage() {
     }
   };
 
+  const handleAddTestimonial = () => {
+    if (!testimonialFormData.name || !testimonialFormData.review) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    const newTestimonial = {
+      id: Date.now(),
+      ...testimonialFormData,
+      createdAt: new Date().toISOString()
+    };
+
+    const updatedTestimonials = [...testimonials, newTestimonial];
+    console.log('Adding new testimonial:', newTestimonial); // Debug log
+    console.log('Updated testimonials array:', updatedTestimonials); // Debug log
+    setTestimonials(updatedTestimonials);
+    // Save to shared storage for other pages to access
+    const saveResult = saveTestimonialsToStorage(updatedTestimonials);
+    console.log('Save result:', saveResult); // Debug log
+    resetTestimonialForm();
+    setIsAddTestimonialModalOpen(false);
+  };
+
+  const handleEditTestimonial = () => {
+    if (!editingTestimonial || !testimonialFormData.name || !testimonialFormData.review) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    const updatedTestimonial = {
+      ...editingTestimonial,
+      ...testimonialFormData
+    };
+
+    const updatedTestimonials = testimonials.map(t => t.id === editingTestimonial.id ? updatedTestimonial : t);
+    console.log('Editing testimonial:', updatedTestimonial); // Debug log
+    console.log('Updated testimonials array after edit:', updatedTestimonials); // Debug log
+    setTestimonials(updatedTestimonials);
+    // Save to shared storage for other pages to access
+    const saveResult = saveTestimonialsToStorage(updatedTestimonials);
+    console.log('Save result after edit:', saveResult); // Debug log
+    resetTestimonialForm();
+    setIsEditTestimonialModalOpen(false);
+    setEditingTestimonial(null);
+  };
+
+  const handleDeleteTestimonial = (id) => {
+    if (window.confirm("Are you sure you want to delete this testimonial?")) {
+      const updatedTestimonials = testimonials.filter(t => t.id !== id);
+      console.log('Deleting testimonial with id:', id); // Debug log
+      console.log('Updated testimonials array after delete:', updatedTestimonials); // Debug log
+      setTestimonials(updatedTestimonials);
+      // Save to shared storage for other pages to access
+      const saveResult = saveTestimonialsToStorage(updatedTestimonials);
+      console.log('Save result after delete:', saveResult); // Debug log
+    }
+  };
+
+  const handleTestimonialImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Open cropper for testimonial avatar (square aspect ratio)
+      openCropper(file, 1, async (croppedBlob) => {
+        setTestimonialFormData(prev => ({ ...prev, isUploading: true }));
+
+        try {
+          // Upload cropped image to Cloudinary
+          const cloudinaryUrl = await uploadToCloudinary(croppedBlob);
+          setTestimonialFormData(prev => ({
+            ...prev,
+            avatarUrl: cloudinaryUrl,
+            isUploading: false
+          }));
+        } catch (error) {
+          alert('Failed to upload image. Please try again.');
+          setTestimonialFormData(prev => ({ ...prev, isUploading: false }));
+        }
+      });
+    }
+  };
+
   return (
     <div className="admin-container">
       <div className="admin-sidebar">
@@ -513,6 +709,20 @@ export default function AdminPage() {
           >
             <span className="nav-icon">💼</span>
             Career Updates
+          </button>
+          <button
+            className={`sidebar-nav-item ${activeTab === "testimonials" ? "active" : ""}`}
+            onClick={() => setActiveTab("testimonials")}
+          >
+            <span className="nav-icon">💬</span>
+            Testimonials
+          </button>
+          <button
+            className="sidebar-nav-item logout-btn"
+            onClick={handleLogout}
+          >
+            <span className="nav-icon">🚪</span>
+            Logout
           </button>
         </nav>
       </div>
@@ -645,6 +855,61 @@ export default function AdminPage() {
               ) : (
                 <div className="no-jobs">
                   <p>No job positions found. Add your first job position above!</p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
+        {activeTab === "testimonials" && (
+          <>
+            <div className="admin-header">
+              <h1>Testimonials Management</h1>
+              <button className="btn-primary" onClick={openAddTestimonialModal}>
+                + Add New Testimonial
+              </button>
+            </div>
+
+            <div className="testimonials-grid">
+              {testimonials && testimonials.length > 0 ? (
+                testimonials.map(testimonial => (
+                  <div key={testimonial.id} className="testimonial-card">
+                    <div className="testimonial-header">
+                      <div className="testimonial-rating">
+                        {"★".repeat(testimonial.rating)}
+                      </div>
+                      <div className="testimonial-actions">
+                        <button
+                          className="btn-secondary"
+                          onClick={() => openEditTestimonialModal(testimonial)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn-danger"
+                          onClick={() => handleDeleteTestimonial(testimonial.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                    <div className="testimonial-content">
+                      <p className="testimonial-review">"{testimonial.review}"</p>
+                      <div className="testimonial-author">
+                        <div className="author-avatar">
+                          <img src={testimonial.avatarUrl} alt={testimonial.name} />
+                        </div>
+                        <div className="author-info">
+                          <h4>{testimonial.name}</h4>
+                          <p>{testimonial.position} at {testimonial.company}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="no-testimonials">
+                  <p>No testimonials found. Add your first testimonial above!</p>
                 </div>
               )}
             </div>
@@ -1195,6 +1460,188 @@ export default function AdminPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Add Testimonial Modal */}
+      {isAddTestimonialModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>Add New Testimonial</h2>
+              <button onClick={() => setIsAddTestimonialModalOpen(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Name *</label>
+                <input
+                  type="text"
+                  value={testimonialFormData.name}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, name: e.target.value })}
+                  placeholder="Client name"
+                />
+              </div>
+              <div className="form-group">
+                <label>Position</label>
+                <input
+                  type="text"
+                  value={testimonialFormData.position}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, position: e.target.value })}
+                  placeholder="Job title"
+                />
+              </div>
+              <div className="form-group">
+                <label>Company</label>
+                <input
+                  type="text"
+                  value={testimonialFormData.company}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, company: e.target.value })}
+                  placeholder="Company name"
+                />
+              </div>
+              <div className="form-group">
+                <label>Review *</label>
+                <textarea
+                  value={testimonialFormData.review}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, review: e.target.value })}
+                  placeholder="Testimonial review"
+                  rows="4"
+                />
+              </div>
+              <div className="form-group">
+                <label>Rating</label>
+                <select
+                  value={testimonialFormData.rating}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, rating: parseInt(e.target.value) })}
+                >
+                  <option value={5}>★★★★★ (5 stars)</option>
+                  <option value={4}>★★★★☆ (4 stars)</option>
+                  <option value={3}>★★★☆☆ (3 stars)</option>
+                  <option value={2}>★★☆☆☆ (2 stars)</option>
+                  <option value={1}>★☆☆☆☆ (1 star)</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Avatar Image Upload</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleTestimonialImageUpload}
+                  disabled={testimonialFormData.isUploading}
+                />
+                {testimonialFormData.isUploading && <p className="upload-status">Uploading to Cloudinary...</p>}
+                {testimonialFormData.avatarUrl && (
+                  <div className="image-preview">
+                    <img src={testimonialFormData.avatarUrl} alt="Avatar Preview" style={{ maxWidth: '100px', marginTop: '10px', borderRadius: '50%' }} />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn-secondary" onClick={() => setIsAddTestimonialModalOpen(false)}>
+                Cancel
+              </button>
+              <button className="btn-primary" onClick={handleAddTestimonial}>
+                Add Testimonial
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Testimonial Modal */}
+      {isEditTestimonialModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>Edit Testimonial</h2>
+              <button onClick={() => setIsEditTestimonialModalOpen(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Name *</label>
+                <input
+                  type="text"
+                  value={testimonialFormData.name}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, name: e.target.value })}
+                  placeholder="Client name"
+                />
+              </div>
+              <div className="form-group">
+                <label>Position</label>
+                <input
+                  type="text"
+                  value={testimonialFormData.position}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, position: e.target.value })}
+                  placeholder="Job title"
+                />
+              </div>
+              <div className="form-group">
+                <label>Company</label>
+                <input
+                  type="text"
+                  value={testimonialFormData.company}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, company: e.target.value })}
+                  placeholder="Company name"
+                />
+              </div>
+              <div className="form-group">
+                <label>Review *</label>
+                <textarea
+                  value={testimonialFormData.review}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, review: e.target.value })}
+                  placeholder="Testimonial review"
+                  rows="4"
+                />
+              </div>
+              <div className="form-group">
+                <label>Rating</label>
+                <select
+                  value={testimonialFormData.rating}
+                  onChange={(e) => setTestimonialFormData({ ...testimonialFormData, rating: parseInt(e.target.value) })}
+                >
+                  <option value={5}>★★★★★ (5 stars)</option>
+                  <option value={4}>★★★★☆ (4 stars)</option>
+                  <option value={3}>★★★☆☆ (3 stars)</option>
+                  <option value={2}>★★☆☆☆ (2 stars)</option>
+                  <option value={1}>★☆☆☆☆ (1 star)</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Avatar Image Upload</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleTestimonialImageUpload}
+                  disabled={testimonialFormData.isUploading}
+                />
+                {testimonialFormData.isUploading && <p className="upload-status">Uploading to Cloudinary...</p>}
+                {testimonialFormData.avatarUrl && (
+                  <div className="image-preview">
+                    <img src={testimonialFormData.avatarUrl} alt="Avatar Preview" style={{ maxWidth: '100px', marginTop: '10px', borderRadius: '50%' }} />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn-secondary" onClick={() => setIsEditTestimonialModalOpen(false)}>
+                Cancel
+              </button>
+              <button className="btn-primary" onClick={handleEditTestimonial}>
+                Update Testimonial
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Image Cropper Modal */}
+      {cropperState.isOpen && (
+        <ImageCropper
+          imageSrc={cropperState.imageSrc}
+          aspect={cropperState.aspect}
+          onCropComplete={handleCropComplete}
+          onCancel={closeCropper}
+        />
       )}
     </div>
   );
