@@ -11,24 +11,199 @@
 .pd-client-label { color: #777; font-size: .9rem; font-family: 'Sora', sans-serif; }
 .pd-client-name { font-weight: 700; font-family: 'Sora', sans-serif; }
 .pd-hero-image img { width: 100%; height: 340px; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+.pd-selected-video { width: 100%; height: 340px; border-radius: 12px; border: 0; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+
+/* Gallery Video */
+.pd-gallery-video {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.pd-gallery-video-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Gallery Item */
+.pd-gallery-item {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.pd-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.pd-gallery-main-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #ff6600;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  z-index: 2;
+}
+.pd-gallery-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pd-gallery-more {
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Sarabun', sans-serif;
+  text-align: center;
+  width: 100%;
+}
 
 /* Gallery */
 .pd-gallery { padding: 20px 20px; }
 .pd-section-inner { max-width: 1100px; margin: 0 auto; }
 .pd-section-title { font-size: 1.6rem; margin: 0 0 12px; font-family: 'Sarabun', sans-serif; }
 .pd-gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.pd-gallery-grid img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+
+/* Gallery Modal */
+.pd-gallery-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.pd-gallery-modal-content {
+  position: relative;
+  max-width: 1200px;
+  max-height: 90vh;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.pd-gallery-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff6600;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.pd-gallery-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pd-gallery-modal-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.pd-gallery-modal-item:hover {
+  transform: scale(1.05);
+}
+
+.pd-gallery-modal-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pd-gallery-modal-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.pd-gallery-modal-video:hover {
+  transform: scale(1.05);
+}
+
+.pd-gallery-modal-video-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Video Modal */
+.pd-video-modal-content {
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.pd-video-modal-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pd-video-modal-iframe {
+  width: 100%;
+  max-width: 800px;
+  height: 450px;
+  border: 0;
+  border-radius: 12px;
+}
 
 /* Tools */
 .pd-tools { padding: 10px 20px 40px; }
 .pd-tags { display: flex; flex-wrap: wrap; gap: 10px; }
-.pd-tag { 
-  background: #f7f7f7; 
-  border: 1px solid #eee; 
-  padding: 6px 10px; 
-  border-radius: 999px; 
-  font-size: .9rem; 
-  font-family: 'Sora', sans-serif; 
+.pd-tag {
+  background: #f7f7f7;
+  border: 1px solid #eee;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: .9rem;
+  font-family: 'Sora', sans-serif;
 }
 
 .pd-tag::before {
@@ -57,5 +232,13 @@
 }
 
 @media (max-width: 768px) {
-  .pd-gallery-grid { grid-template-columns: 1fr; }
+  .pd-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .pd-gallery-modal {
+    padding: 10px;
+  }
+  .pd-gallery-modal-content {
+    padding: 15px;
+    max-width: calc(100vw - 20px);
+  }
+  .pd-gallery-modal-grid { grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); }
 }

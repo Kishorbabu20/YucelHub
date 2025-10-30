@@ -3,7 +3,7 @@
 }
 
 .sp-hero {
-  padding: 60px 20px 80px;
+  padding: 20px 20px 80px;
   text-align: center;
   max-width: 1200px;
   margin: 0 auto;
@@ -13,9 +13,9 @@
   color: #ff6600;
   margin: 0 0 20px 0;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 2rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; */
 }
 
 .sp-title {
@@ -33,7 +33,7 @@
   margin: 0 auto;
   color: #666;
   font-family: 'Sora', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   line-height: 1.6;
 }
 
@@ -43,7 +43,6 @@
   padding: 0 20px 80px;
   display: flex;
   flex-direction: column;
-  gap: 60px;
 }
 
 .sp-service-card {
@@ -166,7 +165,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 20px;
-  text-transform: lowercase;
 }
 
 .sp-get-started-btn:hover {
@@ -283,7 +281,7 @@
 }
 
 .sp-final-cta {
-  margin: 120px auto 120px;
+  margin: 0 auto 40px;
   padding: 0 20px;
 }
 
@@ -355,7 +353,7 @@
 
 @media (max-width: 768px) {
   .sp-hero {
-    padding: 40px 20px 60px;
+    padding: 20px 20px 60px;
   }
 
   .sp-title {
@@ -367,8 +365,8 @@
   }
 
   .sp-services-grid {
-    padding: 0 20px 60px;
-    gap: 40px;
+    padding: 0 20px 40px;
+
   }
 
   .sp-service-card {

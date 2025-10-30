@@ -3,7 +3,7 @@
 }
 
 .pt-hero {
-  padding: 80px 20px 60px;
+  padding: 20px 20px 60px;
 }
 
 .pt-hero-content {
@@ -252,7 +252,7 @@
 
 @media (max-width: 768px) {
   .pt-hero {
-    padding: 60px 20px 40px;
+    padding: 20px 20px 40px;
   }
 
   .pt-title {

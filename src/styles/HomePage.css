@@ -4,8 +4,7 @@ body {
   font-family: 'Sora', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
-  /* Example background color */
+  background-color: #fff;
 }
 
 .header {
@@ -206,9 +205,11 @@ body {
 
   .book-call-mobile {
     display: flex;
-    width: 100%;
+    width: 200px;
     justify-content: center;
-    margin-top: 6px;
+    margin-top: 4px;
+    gap: 10px;
+    align-items: center;
   }
 }
 
@@ -220,7 +221,7 @@ body {
 /* Hero Section */
 .hero-section {
   background: #fff;
-  padding: 60px 40px;
+  padding: 20px 40px;
   min-height: 600px;
   display: flex;
   align-items: center;
@@ -659,30 +660,39 @@ body {
 
 /* Logo Banner */
 .logo-banner {
-  background: #000000;
-  padding: 40px 20px;
+  background: #fff;
+  padding: 20px;
+  overflow: hidden;
 }
 
 .banner-content {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-around;
   align-items: center;
   gap: 40px;
+  animation: scroll 30s linear infinite;
 }
 
-.logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.carousel-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* --- Services Section --- */
 .services-section {
-  padding: 80px 40px;
+  padding: 20px 40px;
   background: #fff;
 }
 
@@ -729,7 +739,7 @@ body {
 }
 
 .service-number {
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   font-weight: 600;
   color: #ff6600;
   margin-right: 20px;
@@ -993,7 +1003,7 @@ body {
 
 /* --- What We Do Section --- */
 .what-we-do-section {
-  padding: 80px 40px;
+  padding: 20px 40px;
   background: #fff;
   position: relative;
   text-align: center;
@@ -1141,7 +1151,7 @@ body {
 }
 
 .buttons-group .btn-primary {
-  padding: 15px 30px;
+  padding: 15px 20px;
   font-size: 1rem;
   font-weight: 600;
   background: #ff6600;
@@ -1150,6 +1160,7 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  text-align: center;
 }
 
 .buttons-group .btn-primary:hover {
@@ -1157,7 +1168,7 @@ body {
 }
 
 .buttons-group .btn-secondary {
-  padding: 15px 30px;
+  padding: 15px 20px;
   font-size: 1rem;
   font-weight: 600;
   background: #f0f0f0;
@@ -1166,6 +1177,7 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  text-align: center;
 }
 
 .buttons-group .btn-secondary:hover {
@@ -1328,9 +1340,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 330px;
-  height: 380px;
+  width: 400px;
+  height: 450px;
   margin: 0 auto;
+  position: relative;
 }
 
 .illustration-container {
@@ -1341,9 +1354,12 @@ body {
 .testimonial-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 12px;
   display: block;
+  border: 1px solid #e0e0e0;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08)
 }
 
 .person-illustration {
@@ -1354,11 +1370,34 @@ body {
 .person-circle {
   width: 120px;
   height: 120px;
-  border: 2px solid #000;
+  border: 2px solid #ff6600;
   border-radius: 50%;
   margin: 0 auto;
   position: relative;
-  background: #f0f0f0;
+  background: #000;
+}
+
+.video-mute-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.2s ease;
+  z-index: 10;
+}
+
+.video-mute-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
 }
 
 .person-avatar {
@@ -1454,6 +1493,10 @@ body {
 .testimonial-card.text-card {
   text-align: left;
   border: 1px solid #e0e0e0;
+}
+
+.testimonial-card.text-card.first-text-card {
+  padding: 20px;
 }
 
 /* Enhanced text testimonial to match provided design */
@@ -1824,7 +1867,7 @@ body {
   }
 
   .section-header {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
   }
 
   /* Logo Banner Responsive */
@@ -1832,14 +1875,15 @@ body {
     gap: 30px;
   }
 
-  .logo-text {
-    font-size: 1.3rem;
+  .carousel-logo {
+    width: 80px;
+    height: 80px;
   }
 }
 
 @media (max-width: 768px) {
   .hero-section {
-    padding: 60px 20px;
+    padding: 20px 20px;
   }
 
   .hero-headline {
@@ -1896,26 +1940,32 @@ body {
   }
 
   .section-header {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
   }
 
   /* Logo Banner Mobile */
   .logo-banner {
-    padding: 30px 15px;
+    padding: 15px;
   }
 
   .banner-content {
     gap: 20px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    animation: none;
+    cursor: grab;
   }
 
-  .logo-text {
-    font-size: 1.1rem;
+  .carousel-logo {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
   }
 
   /* Services Section Mobile */
   .services-section {
-    padding: 60px 20px;
+    padding: 20px 20px;
   }
 
   .services-header .section-title {
@@ -1971,7 +2021,7 @@ body {
 
   /* What We Do Section - Mobile */
   .what-we-do-section {
-    padding: 50px 20px;
+    padding: 20px 20px;
   }
 
   .what-we-do-section .section-title {
@@ -2093,8 +2143,8 @@ body {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
   align-items: center;
 }
 
